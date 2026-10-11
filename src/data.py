@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 
 TRADING_DAYS = 252
+_MIN_VOL = 1e-12  # por debajo se considera volatilidad nula
 
 SECTORS: dict[str, list[str]] = {
     "Tecnología": ["AAPL", "MSFT", "NVDA", "GOOGL", "AMZN"],
@@ -125,7 +126,11 @@ def sharpe_ratio(
 ):
     """Sharpe anualizado: (media diaria anualizada - rf) / volatilidad anualizada."""
     vol = annualized_volatility(returns, periods)
-    return (returns.mean() * periods - risk_free) / vol
+    excess = returns.mean() * periods - risk_free
+    # Volatilidad 0 o NaN -> Sharpe indefinido: NaN explícito (sin RuntimeWarning)
+    if np.isscalar(vol):
+        return excess / vol if vol > _MIN_VOL else np.nan
+    return excess / vol.where(vol > _MIN_VOL)
 
 
 def summary_table(prices: pd.DataFrame, risk_free: float = 0.0) -> pd.DataFrame:
