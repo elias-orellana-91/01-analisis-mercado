@@ -77,7 +77,19 @@ Funciones puras (sin I/O) sobre `Series`/`DataFrame`: `daily_returns`, `cumulati
 
 ## ⚠️ Limitaciones
 
-Universo reducido y elegido con el conocimiento de hoy (sesgo de supervivencia), tasa libre de riesgo = 0 por defecto, rebalanceo diario sin costos. Es un análisis descriptivo, **no una recomendación de inversión**.
+Universo reducido y elegido con el conocimiento de hoy (sesgo de supervivencia), tasa libre de riesgo = 0 por defecto, rebalanceo diario sin costos. Es un análisis descriptivo.
+
+## 📄 Datos y aviso de uso
+
+- Los precios provienen de Yahoo Finance a través de la librería `yfinance`; este proyecto **no tiene afiliación** con Yahoo.
+- Los datos (`data/prices.parquet`) se incluyen **solo con fines educativos y no comerciales**.
+- Los términos de uso de Yahoo aplican a esos datos.
+- La licencia MIT cubre el **código**, no los datos.
+- Este análisis es descriptivo y **no constituye una recomendación de inversión**.
+
+## ⚖️ Licencia
+
+Código distribuido bajo licencia [MIT](LICENSE) © 2026 Elias Orellana. Los datos quedan fuera de esa licencia (ver sección anterior).
 
 ## 🛠️ Stack
 
