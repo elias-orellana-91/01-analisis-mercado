@@ -20,9 +20,9 @@ Datos: precios diarios ajustados (Yahoo Finance vía `yfinance`), 2015-01-01 a 2
 ## 🔎 Hallazgos principales
 
 1. **Tecnología dominó**: ~30× el capital inicial vs ~4× del SPY, con el mejor Sharpe (1,29 vs 0,80). Parte se explica por NVDA y por sesgo de supervivencia.
-2. **Más retorno, más dolor**: máx. drawdown de Tecnología -42 % vs -34 % del SPY; Consumo fue el más defensivo (-22 %).
+2. **Retorno y dolor no siempre van juntos**: Tecnología (+3.042 %) y Bancos (+461 %) superaron al SPY (+303 %) pero con peores caídas (-41,8 % y -45,3 % vs -33,7 %). Energía tuvo la peor caída (-57,5 %) con el menor retorno (+121 %). Consumo fue el más defensivo (-21,6 %).
 3. **Los shocks no son iguales**: la volatilidad del SPY llegó a ~93 % en abril de 2020; en 2022 Energía subió (XOM +60 %) mientras la tecnología caía (NVDA -62 %).
-4. **La diversificación flaquea en crisis**: la correlación media entre acciones sube de 0,40 (2015-19) a 0,51 (2020-22).
+4. **La diversificación falla en los pánicos agudos**: la correlación media entre acciones pasa de 0,40 (2015-19) a 0,75 en el crash del COVID (19-feb a 30-abr 2020); en 2021 baja a 0,27 y en 2022 es 0,45, cercana a la calma.
 5. **Energía y Salud quedaron rezagadas** en riesgo-retorno (Sharpe 0,40 y 0,59 vs 0,80 del mercado).
 
 El detalle, con gráficos y narrativa, está en [`notebooks/analisis.ipynb`](notebooks/analisis.ipynb) (guardado con outputs).
@@ -42,10 +42,11 @@ El detalle, con gráficos y narrativa, está en [`notebooks/analisis.ipynb`](not
 ```powershell
 python -m venv .venv
 .venv\Scripts\activate            # Linux/macOS: source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements.txt   # solo dashboard y módulo de datos
+pip install -r requirements-dev.txt  # + notebook (jupyter, matplotlib, seaborn) y pytest
 
-pytest                            # tests de métricas (sin red)
 streamlit run app.py              # dashboard en http://localhost:8501
+pytest                            # tests (sin red; requiere requirements-dev)
 jupyter nbconvert --to notebook --execute --inplace notebooks/analisis.ipynb
 ```
 
@@ -61,9 +62,13 @@ La primera ejecución descarga los precios y los guarda en `data/prices.parquet`
 ├── notebooks/
 │   └── analisis.ipynb     # Análisis narrado, con outputs
 ├── tests/
-│   └── test_data.py       # Tests pytest con datos sintéticos
+│   ├── test_data.py       # Tests pytest con datos sintéticos
+│   └── test_qa_edge.py    # Casos borde de métricas y robustez del dashboard
 ├── data/prices.parquet    # Cache de precios
-└── requirements.txt
+├── pyproject.toml         # Configuración de pytest
+├── requirements.txt       # Dependencias del dashboard
+├── requirements-dev.txt   # + notebook y tests
+└── .python-version        # 3.12
 ```
 
 ### Módulo `src/data.py`
